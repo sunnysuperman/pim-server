@@ -85,8 +85,7 @@ public abstract class DefaultComponentPacketRouter extends PacketSafeSenderBuild
 				switch (type) {
 				case PacketType.TYPE_PING: {
 					if (sender.getConnection().getChannel() != context.channel()) {
-						LOG.warn(
-								"No the same component connection, so do not reply pong, maybe previous connection is not closed properly.");
+						LOG.warn("No the same component connection, so do not reply pong, maybe previous connection is not closed properly.");
 						return false;
 					}
 					PacketWriter.write(new PongPacket(), context.channel());

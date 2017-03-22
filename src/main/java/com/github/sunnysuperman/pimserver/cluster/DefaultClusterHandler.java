@@ -65,8 +65,8 @@ public abstract class DefaultClusterHandler extends ServerHandler {
 					} else {
 						if (!routed) {
 							try {
-								boolean removed = clientConnectionManager
-										.removeFromRouteTableIfAbsent(clientPacket.getClientID());
+								boolean removed = clientConnectionManager.removeFromRouteTableIfAbsent(clientPacket
+										.getClientID());
 								if (removed) {
 									LOG.warn("removeFromRouteTableIfAbsent: "
 											+ clientPacket.getClientID().getUsername());

@@ -4,12 +4,11 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import com.github.sunnysuperman.commons.bean.Bean;
 import com.github.sunnysuperman.commons.config.PropertiesConfig;
-import com.github.sunnysuperman.commons.utils.BeanUtil;
-import com.github.sunnysuperman.commons.utils.JSONUtil;
 import com.github.sunnysuperman.pimserver.cluster.RedisRouteTable;
-import com.github.sunnysuperman.pimserver.cluster.RouteResult;
 import com.github.sunnysuperman.pimserver.cluster.RedisRouteTable.RedisRouteTableOptions;
+import com.github.sunnysuperman.pimserver.cluster.RouteResult;
 
 public class RedisRouteTableTest extends TestCase {
 	private RedisRouteTable routeTable;
@@ -19,8 +18,7 @@ public class RedisRouteTableTest extends TestCase {
 		super.setUp();
 		PropertiesConfig config = new PropertiesConfig(
 				RedisRouteTableTest.class.getResourceAsStream("redis.properties"));
-		RedisRouteTableOptions options = BeanUtil.map2bean(JSONUtil.parseJSONObject(config.getString("db")),
-				new RedisRouteTableOptions());
+		RedisRouteTableOptions options = Bean.fromJson(config.getString("db"), new RedisRouteTableOptions());
 		routeTable = new RedisRouteTable(options);
 	}
 

@@ -73,8 +73,7 @@ public abstract class CommunicationPacket {
 
 	public final SequenceIdAwarePacketOutput encode() {
 		LinkedList<byte[]> bytes = encodeAsComponents();
-		SequenceIdAwarePacketOutput output = new SequenceIdAwarePacketOutput(ServerPacketType.TYPE_COMMUNICATION,
-				bytes);
+		SequenceIdAwarePacketOutput output = new SequenceIdAwarePacketOutput(ServerPacketType.TYPE_COMMUNICATION, bytes);
 		output.setSequenceId(sequenceId);
 		return output;
 	}

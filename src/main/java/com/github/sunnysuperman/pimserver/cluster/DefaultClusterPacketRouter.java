@@ -63,8 +63,7 @@ public class DefaultClusterPacketRouter extends ConnectionBuilder implements Clu
 			if (type == PacketType.TYPE_PING) {
 				Connection connection = connections.get(ip);
 				if (connection == null || connection.getChannel() != context.channel()) {
-					LOG.warn(
-							"No the same cluster connection, so do not reply pong. Maybe previous connection is not closed properly.");
+					LOG.warn("No the same cluster connection, so do not reply pong. Maybe previous connection is not closed properly.");
 					return false;
 				}
 				PacketWriter.write(new PongPacket(), context.channel());

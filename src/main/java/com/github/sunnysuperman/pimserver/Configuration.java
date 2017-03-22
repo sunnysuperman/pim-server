@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.sunnysuperman.commons.bean.Bean;
 import com.github.sunnysuperman.commons.config.Config;
 import com.github.sunnysuperman.commons.config.Config.ConfigValueChangedListener;
-import com.github.sunnysuperman.commons.utils.BeanUtil;
 
 public abstract class Configuration implements ConfigValueChangedListener {
 	protected static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
@@ -156,7 +156,7 @@ public abstract class Configuration implements ConfigValueChangedListener {
 
 	protected Object parseValue(Field field, Object value) throws Exception {
 		Class<?> fieldType = field.getType();
-		return BeanUtil.parse(value, fieldType, null, null);
+		return Bean.parse(value, fieldType, null, null);
 	}
 
 	private List<Object[]> getKeyValues() throws Exception {
