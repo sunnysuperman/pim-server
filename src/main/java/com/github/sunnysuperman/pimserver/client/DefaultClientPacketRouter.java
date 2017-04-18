@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.sunnysuperman.commons.utils.CollectionUtil;
 import com.github.sunnysuperman.pimsdk.ClientID;
 import com.github.sunnysuperman.pimsdk.Packet;
 import com.github.sunnysuperman.pimserver.PacketWriter;
@@ -99,36 +100,38 @@ public class DefaultClientPacketRouter implements ClientPacketRouter {
 			LOG.error("Failed to get route of " + clientID.getUsername(), e);
 			return routed;
 		}
-		if (routes == null || routes.isEmpty()) {
-			return routed;
-		}
-		try {
-			final String myServerId = clusterPacketRouter.getMyServerId();
-			final String myRegionId = regionPacketRouter == null ? null : regionPacketRouter.getMyRegionId();
-			for (RouteResult route : routes) {
-				if (!route.matchResourceAndRegion(clientID, myRegionId)) {
-					continue;
-				}
-				ClientID target = multiClient ? ClientID.wrap(clientID.getUsername(), route.getResource()) : clientID;
-				boolean local = route.getServer().equals(myServerId);
-				if (local) {
-					ChannelHandlerContext connection = clientConnetionManager.findConnection(target);
-					if (connection != null && write(packet, connection)) {
-						routed |= ROUTE_LOCAL;
+		// route to this region if one or more connection build
+		if (CollectionUtil.isNotEmpty(routes)) {
+			try {
+				final String myServerId = clusterPacketRouter.getMyServerId();
+				final String myRegionId = regionPacketRouter == null ? null : regionPacketRouter.getMyRegionId();
+				for (RouteResult route : routes) {
+					if (!route.matchResourceAndRegion(clientID, myRegionId)) {
+						continue;
 					}
-				} else {
-					if (clusterPacketRouter.route(route.getServer(), new ClientPacket(packet, target))) {
-						routed |= ROUTE_CLUSTER;
+					ClientID target = multiClient ? ClientID.wrap(clientID.getUsername(), route.getResource())
+							: clientID;
+					boolean local = route.getServer().equals(myServerId);
+					if (local) {
+						ChannelHandlerContext connection = clientConnetionManager.findConnection(target);
+						if (connection != null && write(packet, connection)) {
+							routed |= ROUTE_LOCAL;
+						}
+					} else {
+						if (clusterPacketRouter.route(route.getServer(), new ClientPacket(packet, target))) {
+							routed |= ROUTE_CLUSTER;
+						}
 					}
 				}
+			} catch (Exception e) {
+				LOG.error(null, e);
 			}
-		} catch (Exception e) {
-			LOG.error(null, e);
 		}
 		if (routed != ROUTE_NONE && !multiClient) {
 			// Already routed
 			return routed;
 		}
+		// Not need to route global or multi region is disabled
 		if (routeType != ROUTE_GLOBAL || regionPacketRouter == null || regionPacketRouter.getRegionCount() <= 1) {
 			return routed;
 		}
