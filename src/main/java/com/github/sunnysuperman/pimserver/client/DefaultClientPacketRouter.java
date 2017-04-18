@@ -104,7 +104,7 @@ public class DefaultClientPacketRouter implements ClientPacketRouter {
 		}
 		try {
 			final String myServerId = clusterPacketRouter.getMyServerId();
-			final String myRegionId = regionPacketRouter.getMyRegionId();
+			final String myRegionId = regionPacketRouter == null ? null : regionPacketRouter.getMyRegionId();
 			for (RouteResult route : routes) {
 				if (!route.matchResourceAndRegion(clientID, myRegionId)) {
 					continue;
@@ -129,7 +129,7 @@ public class DefaultClientPacketRouter implements ClientPacketRouter {
 			// Already routed
 			return routed;
 		}
-		if (routeType != ROUTE_GLOBAL || regionPacketRouter == null || regionPacketRouter.getRegions().size() <= 1) {
+		if (routeType != ROUTE_GLOBAL || regionPacketRouter == null || regionPacketRouter.getRegionCount() <= 1) {
 			return routed;
 		}
 		// TODO only route to target region

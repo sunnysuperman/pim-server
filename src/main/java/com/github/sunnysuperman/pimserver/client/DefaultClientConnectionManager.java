@@ -32,6 +32,7 @@ public class DefaultClientConnectionManager implements ClientConnectionManager {
 	protected final Map<String, ChannelHandlerContext> connections = new ConcurrentHashMap<String, ChannelHandlerContext>();
 	protected final ClusterPacketRouter clusterPacketRouter;
 	protected final RegionPacketRouter regionPacketRouter;
+	protected final boolean multiRegionLoginNotificationEnabled;
 	protected final RouteTable routeTable;
 	protected final String myServerId;
 	protected final boolean resourceEnabled;
@@ -43,13 +44,15 @@ public class DefaultClientConnectionManager implements ClientConnectionManager {
 	}
 
 	public DefaultClientConnectionManager(boolean resourceEnabled, RouteTable routeTable,
-			ClusterPacketRouter clusterPacketRouter, RegionPacketRouter regionPacketRouter) {
+			ClusterPacketRouter clusterPacketRouter, RegionPacketRouter regionPacketRouter,
+			boolean multiRegionLoginNotificationEnabled) {
 		super();
 		this.resourceEnabled = resourceEnabled;
 		this.routeTable = Utils.notNull(routeTable);
 		this.clusterPacketRouter = Utils.notNull(clusterPacketRouter);
 		this.myServerId = Utils.notNull(clusterPacketRouter.getMyServerId());
 		this.regionPacketRouter = regionPacketRouter;
+		this.multiRegionLoginNotificationEnabled = multiRegionLoginNotificationEnabled;
 		this.myRouteResult = resourceEnabled ? null : new RouteResult(
 				regionPacketRouter != null ? regionPacketRouter.getMyRegionId() : null, myServerId, null);
 	}
@@ -123,25 +126,26 @@ public class DefaultClientConnectionManager implements ClientConnectionManager {
 				return false;
 			}
 		}
-		// notify to other region server
-		try {
-			if (isMultiRegionEnabled()) {
-				regionPacketRouter.routeToAll(new OnlinePacket(clientID, getLocalRouteResult(clientID)), 0);
-			}
-		} catch (Throwable t) {
-			LOG.error(null, t);
-		}
 		// close local duplicate connection
 		if (oldConnection != null) {
 			removeLocalhostDuplicateConnection(clientKey, oldConnection);
 		}
 		// close cluster duplicate connection
 		removeClusterDuplicateConnection(clientID, false);
+		// notify to other region server
+		if (isMultiRegionLoginNotificationEnabled()) {
+			try {
+				regionPacketRouter.routeToAll(new OnlinePacket(clientID, getLocalRouteResult(clientID)), 0);
+			} catch (Throwable t) {
+				LOG.error(null, t);
+			}
+		}
 		return true;
 	}
 
-	private boolean isMultiRegionEnabled() {
-		return regionPacketRouter != null && regionPacketRouter.getRegions().size() > 1;
+	private boolean isMultiRegionLoginNotificationEnabled() {
+		return multiRegionLoginNotificationEnabled && regionPacketRouter != null
+				&& regionPacketRouter.getRegionCount() > 1;
 	}
 
 	private void removeLocalhostDuplicateConnection(String clientKey, ChannelHandlerContext connection) {
@@ -161,7 +165,7 @@ public class DefaultClientConnectionManager implements ClientConnectionManager {
 		try {
 			Set<RouteResult> routes = routeTable.get(clientID.getUsername());
 			if (routes != null) {
-				final String myRegionId = regionPacketRouter.getMyRegionId();
+				final String myRegionId = regionPacketRouter == null ? null : regionPacketRouter.getMyRegionId();
 				for (RouteResult route : routes) {
 					if (!route.matchResourceAndRegion(clientID, myRegionId)) {
 						continue;
@@ -214,7 +218,7 @@ public class DefaultClientConnectionManager implements ClientConnectionManager {
 
 	private void offlineNotify(ClientID clientID) {
 		try {
-			if (isMultiRegionEnabled()) {
+			if (isMultiRegionLoginNotificationEnabled()) {
 				regionPacketRouter.routeToAll(new OfflinePacket(clientID, getLocalRouteResult(clientID)), 0);
 			}
 		} catch (Throwable t) {

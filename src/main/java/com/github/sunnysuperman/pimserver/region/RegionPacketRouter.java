@@ -1,12 +1,10 @@
 package com.github.sunnysuperman.pimserver.region;
 
-import java.util.Collection;
-
 import com.github.sunnysuperman.pimserver.packet.CommunicationPacket;
 
 public interface RegionPacketRouter {
 
-	Collection<Region> getRegions();
+	int getRegionCount();
 
 	String getMyRegionId();
 

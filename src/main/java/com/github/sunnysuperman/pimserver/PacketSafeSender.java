@@ -202,7 +202,7 @@ public class PacketSafeSender {
 		}
 		byte theMaxTry = (maxTry <= 0 || maxTry > Byte.MAX_VALUE) ? sendMaxTry : (byte) maxTry;
 		// append to queue
-		boolean ok = true;
+		boolean ok = false;
 		String sequenceId = output.getSequenceId();
 		if (sequenceId != null && theMaxTry > 1) {
 			try {

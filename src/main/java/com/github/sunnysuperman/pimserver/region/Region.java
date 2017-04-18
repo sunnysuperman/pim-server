@@ -4,7 +4,6 @@ import com.github.sunnysuperman.commons.utils.JSONUtil;
 
 public class Region {
 	private String id;
-	private String host;
 
 	public String getId() {
 		return id;
@@ -12,14 +11,6 @@ public class Region {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
 	}
 
 	public boolean equals(Object o) {
