@@ -117,7 +117,9 @@ public class DefaultClientPacketRouter implements ClientPacketRouter {
 						if (connection != null && write(packet, connection)) {
 							routed |= ROUTE_LOCAL;
 						}
+						// TODO removeFromRouteTableIfAbsent
 					} else {
+						// TODO should be really routed
 						if (clusterPacketRouter.route(route.getServer(), new ClientPacket(packet, target))) {
 							routed |= ROUTE_CLUSTER;
 						}

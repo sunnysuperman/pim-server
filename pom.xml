@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.sunnysuperman</groupId>
 	<artifactId>pim-server</artifactId>
-	<version>0.3</version>
+	<version>0.5</version>
 	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
 
