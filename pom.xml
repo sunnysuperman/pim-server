@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.sunnysuperman</groupId>
 	<artifactId>pim-server</artifactId>
-	<version>0.5</version>
+	<version>0.9</version>
 	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
 
@@ -39,11 +39,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>commons</artifactId>
 			<version>0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>pim-java-sdk</artifactId>
-			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
