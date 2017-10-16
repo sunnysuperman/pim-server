@@ -4,6 +4,6 @@ import com.github.sunnysuperman.pim.bootstrap.ServerConfig;
 
 public interface WebSocketHandlerFactory {
 
-	WebSocketHandler createHandler(ServerConfig config);
+    WebSocketHandler createHandler(ServerConfig config);
 
 }

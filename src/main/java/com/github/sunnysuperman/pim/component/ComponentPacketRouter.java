@@ -4,7 +4,7 @@ import com.github.sunnysuperman.pim.protocol.CommunicationPacket;
 
 public interface ComponentPacketRouter {
 
-	boolean route(CommunicationPacket packet, int maxTry);
+    boolean route(CommunicationPacket packet, int maxTry);
 
-	void stop(int seconds);
+    void stop(int seconds);
 }

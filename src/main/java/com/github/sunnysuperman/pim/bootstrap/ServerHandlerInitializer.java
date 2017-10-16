@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ServerHandlerInitializer {
 
-	List<ChannelHandlerWrap> createHandlers(ServerConfig config);
+    List<ChannelHandlerWrap> createHandlers(ServerConfig config);
 
 }

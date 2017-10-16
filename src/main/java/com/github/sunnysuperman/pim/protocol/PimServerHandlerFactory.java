@@ -4,6 +4,6 @@ import com.github.sunnysuperman.pim.bootstrap.ServerConfig;
 
 public interface PimServerHandlerFactory {
 
-	PacketHandler createHandler(ServerConfig config);
+    PacketHandler createHandler(ServerConfig config);
 
 }

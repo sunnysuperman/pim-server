@@ -11,33 +11,33 @@ import com.github.sunnysuperman.pim.region.RegionPacketRouter;
 
 public interface ClientConnectionManager {
 
-	String getMyServerId();
+    String getMyServerId();
 
-	boolean isResourceEnabled();
+    boolean isResourceEnabled();
 
-	RouteTable getRouteTable();
+    RouteTable getRouteTable();
 
-	ClusterPacketRouter getClusterPacketRouter();
+    ClusterPacketRouter getClusterPacketRouter();
 
-	RegionPacketRouter getRegionPacketRouter();
+    RegionPacketRouter getRegionPacketRouter();
 
-	boolean isRegionEnabled();
+    boolean isRegionEnabled();
 
-	boolean addConnection(ClientID clientID, ChannelHandlerContext channel) throws Exception;
+    boolean addConnection(ClientID clientID, ChannelHandlerContext channel) throws Exception;
 
-	boolean removeConnection(ClientID clientID, ChannelHandlerContext channel) throws Exception;
+    boolean removeConnection(ClientID clientID, ChannelHandlerContext channel) throws Exception;
 
-	boolean removeAndCloseConnection(ClientID clientID) throws Exception;
+    boolean removeAndCloseConnection(ClientID clientID) throws Exception;
 
-	boolean removeFromRouteTableIfAbsent(ClientID clientID) throws Exception;
+    boolean removeFromRouteTableIfAbsent(ClientID clientID) throws Exception;
 
-	ChannelHandlerContext findConnection(ClientID clientID) throws Exception;
+    ChannelHandlerContext findConnection(ClientID clientID) throws Exception;
 
-	void onRemoteLogin(OnlinePacket onlinePacket) throws Exception;
+    void onRemoteLogin(OnlinePacket onlinePacket) throws Exception;
 
-	void onRemoteLogout(OfflinePacket offlinePacket) throws Exception;
+    void onRemoteLogout(OfflinePacket offlinePacket) throws Exception;
 
-	int countConnections();
+    int countConnections();
 
-	void stop();
+    void stop();
 }

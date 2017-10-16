@@ -4,14 +4,14 @@ import com.github.sunnysuperman.pim.protocol.CommunicationPacket;
 
 public interface RegionPacketRouter {
 
-	int getRegionCount();
+    int getRegionCount();
 
-	String getMyRegionId();
+    String getMyRegionId();
 
-	boolean routeToRegion(String regionId, CommunicationPacket packet, int maxTry);
+    boolean routeToRegion(String regionId, CommunicationPacket packet, int maxTry);
 
-	boolean routeToAll(CommunicationPacket packet, int maxTry);
+    boolean routeToAll(CommunicationPacket packet, int maxTry);
 
-	void stop(int seconds);
+    void stop(int seconds);
 
 }
